@@ -2,14 +2,21 @@
 using namespace std;
 typedef string::const_iterator State;
 
-double expression(State &begin);
-double term(State &begin);
-double number(State &begin);
+double expression(State&);
+double term(State&);
+double factor(State&);
+double number(State&);
 void error();
+void consume(State&,char);
 
 void error(){
     cout<<"error"<<endl;
     exit(0);
+}
+
+void consume(State &begin,char expected){
+    if(*begin==expected)begin++;
+    else error();
 }
 
 double expression(State &begin){
@@ -35,15 +42,15 @@ double expression(State &begin){
 }
 
 double term(State &begin){
-    double ret=number(begin);
+    double ret=factor(begin);
     while(1){
         if((*begin)=='*'){
             begin++;
-            ret*=number(begin);
+            ret*=factor(begin);
         }
         else if((*begin)=='/'){
             begin++;
-            double temp=number(begin);
+            double temp=factor(begin);
             if(temp==0)error();
             else{
                 ret/=temp;
@@ -51,6 +58,17 @@ double term(State &begin){
         }
         else break;
     }
+    return ret;
+}
+
+double factor(State &begin){
+    double ret;
+    if((*begin)=='('){
+        begin++;
+        ret=expression(begin);
+        consume(begin,')');
+    }
+    else ret=number(begin);
     return ret;
 }
 
