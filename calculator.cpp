@@ -55,10 +55,9 @@ double term(State &begin){
 }
 
 double number(State &begin){
-    auto isNumber=[](State begin){return (0<=(*begin)-'0')&&((*begin)-'0'<=9);};
-    if(!isNumber(begin))error();
+    if(!isdigit(*begin))error();
     double ret=0;
-    while(isNumber(begin)){
+    while(isdigit(*begin)){
         ret*=10;
         ret+=(*begin)-'0';
         begin++;
