@@ -34,8 +34,10 @@ double expression(State &begin){
 }
 
 double number(State &begin){
+    auto isNumber=[](State begin){return (0<=(*begin)-'0')&&((*begin)-'0'<=9);};
+    if(!isNumber(begin))error();
     double ret=0;
-    while(0<=((*begin)-'0')&&((*begin)-'0')<=9){
+    while(isNumber(begin)){
         ret*=10;
         ret+=(*begin)-'0';
         begin++;
