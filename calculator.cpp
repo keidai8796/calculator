@@ -3,6 +3,7 @@ using namespace std;
 typedef string::const_iterator State;
 
 double expression(State &begin);
+double term(State &begin);
 double number(State &begin);
 void error();
 
@@ -17,16 +18,36 @@ double expression(State &begin){
         minus=true;
         begin++;
     }
-    double ret=number(begin);
+    double ret=term(begin);
     if(minus)ret*=-1;
     while(1){
         if((*begin)=='+'){
             begin++;
-            ret+=number(begin);
+            ret+=term(begin);
         }
         else if((*begin)=='-'){
             begin++;
-            ret-=number(begin);
+            ret-=term(begin);
+        }
+        else break;
+    }
+    return ret;
+}
+
+double term(State &begin){
+    double ret=number(begin);
+    while(1){
+        if((*begin)=='*'){
+            begin++;
+            ret*=number(begin);
+        }
+        else if((*begin)=='/'){
+            begin++;
+            double temp=number(begin);
+            if(temp==0)error();
+            else{
+                ret/=temp;
+            }
         }
         else break;
     }
